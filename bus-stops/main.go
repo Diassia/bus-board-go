@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -23,6 +24,14 @@ type Postcoderesponse struct {
 // type Stopsresponse struct {
 // 	Result
 // }
+
+func PrettyJSON(str string) (string, error) {
+	var prettyJSON bytes.Buffer
+	if err := json.Indent(&prettyJSON, []byte(str), "", "    "); err != nil {
+		return "", err
+	}
+	return prettyJSON.String(), nil
+}
 
 func FetchLocation(postcode string) (float32, float32) {
 	URL := "https://api.postcodes.io/postcodes/" + postcode
@@ -90,8 +99,12 @@ func FetchNearbyStops(long float32, lat float32) {
 		log.Fatal(err)
 	}
 	s := string(bodyBytes)
-	fmt.Println(s)
 
+	res, err := PrettyJSON(s)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(res)
 }
 
 func main() {
