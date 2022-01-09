@@ -17,13 +17,20 @@ type PostcodeData struct {
 	Latitude  float32 `json:"latitude"`
 }
 
+type BusStop struct {
+	Name      string  `json:"name"`
+	Longitude float32 `json:"longitude"`
+	Latitude  float32 `json:"latitude"`
+	Distance  float32 `json:"distance"`
+}
+
 type Postcoderesponse struct {
 	Result PostcodeData
 }
 
-// type Stopsresponse struct {
-// 	Result
-// }
+type Stopsresponse struct {
+	Member []BusStop
+}
 
 func PrettyJSON(str string) (string, error) {
 	var prettyJSON bytes.Buffer
@@ -98,18 +105,38 @@ func FetchNearbyStops(long float32, lat float32) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	s := string(bodyBytes)
+	// s := string(bodyBytes)
 
-	res, err := PrettyJSON(s)
-	if err != nil {
-		log.Fatal(err)
+	var sResp Stopsresponse
+	error := json.Unmarshal(bodyBytes, &sResp)
+	if error != nil {
+		log.Println(err)
 	}
-	fmt.Println(res)
+
+	// bus 1
+	b1name := sResp.Member[0].Name
+	b1long := sResp.Member[0].Longitude
+	b1lat := sResp.Member[0].Latitude
+	fmt.Printf("%v is at longitude: %v and latitude: %v\n", b1name, b1long, b1lat)
+
+	// bus 2
+	b2name := sResp.Member[1].Name
+	b2long := sResp.Member[1].Longitude
+	b2lat := sResp.Member[1].Latitude
+	fmt.Printf("%v is at longitude: %v and latitude: %v\n", b2name, b2long, b2lat)
+
+	// res, err := PrettyJSON(s)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	// fmt.Println(res)
 }
 
 func main() {
-	longitude, latitude := FetchLocation("nw51tl")
-	FetchNearbyStops(longitude, latitude)
+	fmt.Println("Enter a postcode: ")
+	var postcode string
+	fmt.Scanln(&postcode)
 
-	fmt.Printf("Longitude: %v\nLatitude: %v\n", longitude, latitude)
+	longitude, latitude := FetchLocation(postcode)
+	FetchNearbyStops(longitude, latitude)
 }
