@@ -22,6 +22,7 @@ type BusStop struct {
 	Longitude float32 `json:"longitude"`
 	Latitude  float32 `json:"latitude"`
 	Distance  float32 `json:"distance"`
+	Atcocode  string  `json:"atcocode"`
 }
 
 type Postcoderesponse struct {
@@ -105,7 +106,7 @@ func FetchNearbyStops(long float32, lat float32) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	// s := string(bodyBytes)
+	s := string(bodyBytes)
 
 	var sResp Stopsresponse
 	error := json.Unmarshal(bodyBytes, &sResp)
@@ -125,11 +126,11 @@ func FetchNearbyStops(long float32, lat float32) {
 	b2lat := sResp.Member[1].Latitude
 	fmt.Printf("%v is at longitude: %v and latitude: %v\n", b2name, b2long, b2lat)
 
-	// res, err := PrettyJSON(s)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-	// fmt.Println(res)
+	res, err := PrettyJSON(s)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(res)
 }
 
 func main() {
