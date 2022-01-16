@@ -75,10 +75,10 @@ func FetchLocation(postcode string) (float32, float32) {
 	return longitude, latitude
 }
 
-func FetchNearbyStops(long float32, lat float32) {
-	err := godotenv.Load("../.env")
+func FetchNearbyStops(long float32, lat float32) string {
+	err := godotenv.Load(".env")
 	if err != nil {
-		log.Fatalf("Error loading .env file")
+		log.Fatalf(err.Error())
 	}
 
 	// expire 30 days (from 09/01)
@@ -131,13 +131,17 @@ func FetchNearbyStops(long float32, lat float32) {
 		log.Fatal(err)
 	}
 	fmt.Println(res)
+
+	stops := "Your nearest stops are " + b1name + " and " + b2name
+
+	return stops
 }
 
-func main() {
-	fmt.Println("Enter a postcode: ")
-	var postcode string
-	fmt.Scanln(&postcode)
+// func main() {
+// 	fmt.Println("Enter a postcode: ")
+// 	var postcode string
+// 	fmt.Scanln(&postcode)
 
-	longitude, latitude := FetchLocation(postcode)
-	FetchNearbyStops(longitude, latitude)
-}
+// 	longitude, latitude := FetchLocation(postcode)
+// 	FetchNearbyStops(longitude, latitude)
+// }
