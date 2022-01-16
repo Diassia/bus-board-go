@@ -15,10 +15,7 @@ func (sh stopHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-
-	mux := http.NewServeMux()
-	sh := stopHandler{format: "Ruskington B17"}
-	mux.Handle("/stop", sh) //this will handle the request and call our handle function
+	http.Handle("/stop", stopHandler{format: "Ruskington B17"})
 	log.Println("Listening...")
-	http.ListenAndServe(":3000", mux)
+	log.Fatal(http.ListenAndServe(":3000", nil))
 }
