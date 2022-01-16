@@ -3,6 +3,8 @@ package main
 import (
 	"log"
 	"net/http"
+
+	"bus-stops/stops"
 )
 
 type stopHandler struct {
@@ -16,6 +18,7 @@ func (sh stopHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	http.Handle("/stop", stopHandler{format: "Ruskington B17"})
+	// http.Handle("/stop?postcode=" + postcode, )
 	log.Println("Listening...")
 	log.Fatal(http.ListenAndServe(":3000", nil))
 }

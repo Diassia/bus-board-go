@@ -1,4 +1,4 @@
-module main
+module bus-stops
 
 go 1.17
 
